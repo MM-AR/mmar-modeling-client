@@ -879,6 +879,54 @@ export class FetchHelper implements ICustomElementViewModel {
     }
 
     /**
+     * Get all classes
+     * @return Successful operation
+     */
+    classesAllGET(): Promise<Class[]> {
+        let url_ = this.baseUrl + "/metamodel/classes";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+
+        this.logger.log('API call on ' + url_, 'api')
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processClassesAllGET(_response);
+        });
+
+    }
+
+    protected processClassesAllGET(response: Response): Promise<Class[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(Class.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Class[]>(null as any);
+    }
+
+    /**
      * Get a class by uuid
      * @param classeUuid The uuid of a class
      * @return Successful operation
@@ -2424,6 +2472,54 @@ export class FetchHelper implements ICustomElementViewModel {
     }
 
     /**
+     * Get all relationclasses
+     * @return Successful operation
+     */
+    relationclassesAllGET(): Promise<Relationclass[]> {
+        let url_ = this.baseUrl + "/metamodel/relationClasses";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+
+        this.logger.log('API call on ' + url_, 'api')
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRelationclassesAllGET(_response);
+        });
+
+    }
+
+    protected processRelationclassesAllGET(response: Response): Promise<Relationclass[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(Relationclass.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Relationclass[]>(null as any);
+    }
+
+    /**
      * Get a relation class by uuid
      * @param relClasseUuid The uuid of a relation class
      * @return Successful operation
@@ -3233,6 +3329,52 @@ export class FetchHelper implements ICustomElementViewModel {
             });
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * Get all ports
+     */
+    portsAllGET(): Promise<Port[]> {
+        let url_ = this.baseUrl + "/metamodel/ports";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+
+        this.logger.log('API call on ' + url_, 'api')
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processPortsAllGet(_response);
+        });
+    }
+
+    protected processPortsAllGet(response: Response): Promise<Port[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(Port.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Port[]>(null as any);
     }
 
     /**
