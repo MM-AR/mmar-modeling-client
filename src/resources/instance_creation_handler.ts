@@ -470,7 +470,8 @@ export class InstanceCreationHandler {
         );
 
         this.globalObjectInstance.current_port_instance = port_instance;
-        class_instance.port_instance.push(port_instance);
+        class_instance ? class_instance.port_instance.push(port_instance): undefined;
+        scene_instance ? scene_instance.port_instances.push(port_instance) : undefined;
 
         //push to log file
         this.logger.log('Port Instance ' + port_instance.name + ' created', 'done');
