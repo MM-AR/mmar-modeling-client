@@ -939,6 +939,7 @@ export class GraphicContext {
     this.labels_rel_middle_objects = {};
     this.attached_ports = {};
     this.button3D = {};
+    this.current_instance_object = null;
   }
 
 
