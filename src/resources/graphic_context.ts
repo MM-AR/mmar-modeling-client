@@ -878,6 +878,8 @@ export class GraphicContext {
 
     //reset gc
     await this.resetInstance();
+
+    return obj;
   }
 
   async updateVizRepRelClass(relationclass_instance: RelationclassInstance) {
