@@ -2,7 +2,7 @@ import { Logger } from 'resources/services/logger';
 import { HttpClient } from '@aurelia/fetch-client';
 import { newInstanceOf } from '@aurelia/kernel';
 import { ICustomElementViewModel } from 'aurelia';
-import { Class, Metamodel, SceneType, Attribute, Relationclass, Role, Port, AttributeType, SceneInstance, ClassInstance, RelationclassInstance, RoleInstance, PortInstance, AttributeInstance, Procedure } from '../../../../mmar-global-data-structure';
+import { Class, Metamodel, SceneType, Attribute, Relationclass, Role, Port, AttributeType, SceneInstance, ClassInstance, RelationclassInstance, RoleInstance, PortInstance, AttributeInstance, Procedure, UUID } from '../../../../mmar-global-data-structure';
 import { IHydratedController } from '@aurelia/runtime-html';
 import { GlobalDefinition } from 'resources/global_definitions';
 
@@ -876,6 +876,54 @@ export class FetchHelper implements ICustomElementViewModel {
             });
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * Get all classes
+     * @return Successful operation
+     */
+    classesAllGET(): Promise<Class[]> {
+        let url_ = this.baseUrl + "/metamodel/classes";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+
+        this.logger.log('API call on ' + url_, 'api')
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processClassesAllGET(_response);
+        });
+
+    }
+
+    protected processClassesAllGET(response: Response): Promise<Class[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(Class.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Class[]>(null as any);
     }
 
     /**
@@ -2424,6 +2472,54 @@ export class FetchHelper implements ICustomElementViewModel {
     }
 
     /**
+     * Get all relationclasses
+     * @return Successful operation
+     */
+    relationclassesAllGET(): Promise<Relationclass[]> {
+        let url_ = this.baseUrl + "/metamodel/relationClasses";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+
+        this.logger.log('API call on ' + url_, 'api')
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRelationclassesAllGET(_response);
+        });
+
+    }
+
+    protected processRelationclassesAllGET(response: Response): Promise<Relationclass[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(Relationclass.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Relationclass[]>(null as any);
+    }
+
+    /**
      * Get a relation class by uuid
      * @param relClasseUuid The uuid of a relation class
      * @return Successful operation
@@ -3233,6 +3329,52 @@ export class FetchHelper implements ICustomElementViewModel {
             });
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * Get all ports
+     */
+    portsAllGET(): Promise<Port[]> {
+        let url_ = this.baseUrl + "/metamodel/ports";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+
+        this.logger.log('API call on ' + url_, 'api')
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processPortsAllGet(_response);
+        });
+    }
+
+    protected processPortsAllGet(response: Response): Promise<Port[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                if (Array.isArray(resultData200)) {
+                    result200 = [] as any;
+                    for (let item of resultData200)
+                        result200!.push(Port.fromJS(item));
+                }
+                else {
+                    result200 = <any>null;
+                }
+                return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<Port[]>(null as any);
     }
 
     /**
@@ -7273,19 +7415,112 @@ export class FetchHelper implements ICustomElementViewModel {
         return Promise.resolve<AttributeType[]>(null as any);
     }
 
-    getFileUploadbyUUIDUrl(AttributeInstanceValue: string): string {
-        let url_ = this.baseUrl + "/files/{AttributeInstanceValue}";
-        if (AttributeInstanceValue === undefined || AttributeInstanceValue === null)
-            throw new Error("The parameter 'AttributeInstanceValue' must be defined.");
-        url_ = url_.replace("{AttributeInstanceValue}", encodeURIComponent("" + AttributeInstanceValue));
+    // Function to download a specific file from database via get api
+    async getFileByUUID(uuid: UUID): Promise<File> {
+        let url_ = this.baseUrl + "/files/{uuid}";
+        if (uuid === undefined || uuid === null)
+            throw new Error("The parameter 'uuid' must be defined.");
+        url_ = url_.replace("{uuid}", encodeURIComponent("" + uuid));
         url_ = url_.replace(/[?&]$/, "");
-        return url_;
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+        this.logger.log('API call on ' + url_, 'api')
+        const response = await this.http.fetch(url_, options_);
+        const blob = await response.blob();
+        const file = new File([blob], "filename", { type: blob.type });
+        return file;
     }
 
-    getFileUploadUrl(): string {
+    // Function to post a file to database via post api
+    async postFile(file: File): Promise<any> {
         let url_ = this.baseUrl + "/files";
         url_ = url_.replace(/[?&]$/, "");
-        return url_;
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const options_: RequestInit = {
+            body: formData,
+            method: "POST",
+            headers: {
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+
+        this.logger.log('API call on ' + url_, 'api')
+        const response = await this.http.fetch(url_, options_);
+        const responseText = await response.text();
+        return JSON.parse(responseText);
+    }
+
+    // Function to patch a specific file in database via patch api
+    async patchFileByUUID(uuid: UUID, file: File): Promise<string> {
+        let url_ = this.baseUrl + "/files/{uuid}";
+        if (uuid === undefined || uuid === null)
+            throw new Error("The parameter 'uuid' must be defined.");
+        url_ = url_.replace("{uuid}", encodeURIComponent("" + uuid));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let formData = new FormData();
+        formData.append('file', file);
+
+        let options_: RequestInit = {
+            body: formData,
+            method: "PATCH",
+            headers: {
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+
+        this.logger.log('API call on ' + url_, 'api')
+        const response = await this.http.fetch(url_, options_);
+        const responseText = await response.text();
+        return JSON.parse(responseText);
+    }
+
+    // Function to delete a specific file in database via delete api
+    async deleteFileByUUID(uuid: UUID): Promise<void> {
+        let url_ = this.baseUrl + "/files/{uuid}";
+        if (uuid === undefined || uuid === null)
+            throw new Error("The parameter 'uuid' must be defined.");
+        url_ = url_.replace("{uuid}", encodeURIComponent("" + uuid));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+
+        this.logger.log('API call on ' + url_, 'api')
+        await this.http.fetch(url_, options_);
+    }
+
+    // Function to get all file uuids from database via get api
+    async getAllFileUUIDs(): Promise<UUID[]> {
+        let url_ = this.baseUrl + "/files/alluuids";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "authorization": "Bearer " + this.globalObjectInstance.accessToken
+            }
+        };
+
+        this.logger.log('API call on ' + url_, 'api')
+        const response = await this.http.fetch(url_, options_);
+        const responseText = await response.text();
+        let result = JSON.parse(responseText);
+        return result["uuids"];
     }
 }
 

@@ -4,6 +4,7 @@ import { GlobalDefinition } from 'resources/global_definitions';
 import { UUID, Class, Relationclass, Port, SceneType, Attribute } from '../../../../mmar-global-data-structure';
 import { FetchHelper } from './fetchHelper';
 import { plainToInstance } from 'class-transformer';
+import { FileUtility } from './fileUtility';
 
 @singleton()
 export class MetaUtility {
@@ -11,9 +12,44 @@ export class MetaUtility {
 
     constructor(
         private globalObjectInstance: GlobalDefinition,
-        private fetchHelper: FetchHelper
+        private fetchHelper: FetchHelper,
+        private fileUtility: FileUtility
     ) { }
 
+    private allFileUUIDS: string[] = [];    // To store all file UUIDs
+
+    async getAllFileUUIDs() {
+        this.allFileUUIDS = await this.fetchHelper.getAllFileUUIDs();
+    }
+
+    // Function to get all the files from the database
+    async getAllFiles() {
+        for (const uuid of this.allFileUUIDS) {
+            const file = await this.fetchHelper.getFileByUUID(uuid);
+            let str: string;
+            if (file.type.includes('model/gltf+json') || file.type.includes('application/octet-stream')) {
+                str = await file.text();
+            } else {
+                str = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const result = typeof reader.result === 'string' ? reader.result : '';
+                        resolve(result);
+                    };
+                    reader.onerror = (error) => {
+                        reject(error);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+            await this.fileUtility.addFile(uuid, str);
+        }
+    }
+
+    async getFileByUUID(uuid: UUID): Promise<string> {
+        const file = await this.fileUtility.getFile(uuid);
+        return file;
+    }
 
     async getAllSceneTypesFromDB() {
         let sceneTypes: SceneType[] = [];
@@ -30,18 +66,18 @@ export class MetaUtility {
 
     // Function to get current tab context scene type
     async getTabContextSceneType() {
-            let tabContext = this.globalObjectInstance.tabContext[this.globalObjectInstance.selectedTab];
-            let sceneType = tabContext.sceneType;
-            return sceneType;
-        }
+        let tabContext = this.globalObjectInstance.tabContext[this.globalObjectInstance.selectedTab];
+        let sceneType = tabContext.sceneType;
+        return sceneType;
+    }
 
     async getSceneTypeByUUID(uuid: UUID) {
-            return this.globalObjectInstance.sceneTypes.find(sceneType => sceneType.uuid == uuid);
-        }
+        return this.globalObjectInstance.sceneTypes.find(sceneType => sceneType.uuid == uuid);
+    }
 
     // Function to find objects of a specific type within a given object and its children
     findType(object, type, objects) {
-            for(const child of object.children) {
+        for (const child of object.children) {
             if (child.type === type) {
                 objects.push(child);
             }
