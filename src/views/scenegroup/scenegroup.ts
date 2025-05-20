@@ -70,8 +70,6 @@ export class Scenegroup {
         // open dialogLoadingWindow
         this.dialogHelper.openDialog(this.dialogLoadingWindow, 'openDialogLoadingWindow', {});
 
-        await this.metaUtility.getAllFileUUIDs();
-        await this.metaUtility.getAllFiles();
 
         // fetch all sceneTypes from the database
         await this.metaUtility.getAllSceneTypesFromDB().then(async (sceneTypes) => {

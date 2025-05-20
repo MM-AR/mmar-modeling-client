@@ -4,6 +4,7 @@ import { GlobalDefinition } from 'resources/global_definitions';
 import { UUID, Class, Relationclass, Port, SceneType, Attribute } from '../../../../mmar-global-data-structure';
 import { FetchHelper } from './fetchHelper';
 import { plainToInstance } from 'class-transformer';
+import { FileUtility } from './fileUtility';
 
 @singleton()
 export class MetaUtility {
@@ -11,11 +12,11 @@ export class MetaUtility {
 
     constructor(
         private globalObjectInstance: GlobalDefinition,
-        private fetchHelper: FetchHelper
+        private fetchHelper: FetchHelper,
+        private fileUtility: FileUtility
     ) { }
 
     private allFileUUIDS: string[] = [];    // To store all file UUIDs
-    private allFiles: Map<UUID, string> = new Map<UUID, string>(); // To store all files
 
     async getAllFileUUIDs() {
         this.allFileUUIDS = await this.fetchHelper.getAllFileUUIDs();
@@ -41,12 +42,13 @@ export class MetaUtility {
                     reader.readAsDataURL(file);
                 });
             }
-            this.allFiles.set(uuid, str);
+            await this.fileUtility.addFile(uuid, str);
         }
     }
 
-    getFileByUUID(uuid: UUID): string {
-        return this.allFiles.get(uuid);
+    async getFileByUUID(uuid: UUID): Promise<string> {
+        const file = await this.fileUtility.getFile(uuid);
+        return file;
     }
 
     async getAllSceneTypesFromDB() {

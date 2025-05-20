@@ -55,6 +55,7 @@ export class GlobalDefinition {
   orbitControls3d: OrbitControls;
   readyForVizRepUpdate: boolean;
   runMechanism: boolean;
+  localFiles: Map<string, string>;
 
   constructor() {
     
@@ -92,6 +93,7 @@ export class GlobalDefinition {
     this.threeDimensional = false;
     this.readyForVizRepUpdate = true;
     this.runMechanism = false;
+    this.localFiles = new Map<string, string>();
   }
   
       

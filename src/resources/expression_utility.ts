@@ -215,14 +215,13 @@ export class ExpressionUtility {
         }
     }
 
-    getFileByUUIDAndConvertToBase64(fileUUID: UUID): string {
-        // const file = await this.fetchHelper.getFileByUUID(fileUUID);
-        const str = this.metaUtility.getFileByUUID(fileUUID);
-        return str;
-    }
-
-    getBase64FilebyUUID(fileUUID: UUID): string {
-        // const file = await this.fetchHelper.getFileByUUID(fileUUID);
+    /**
+     * Retrieves the file associated with a given UUID.
+     * 
+     * @param {UUID} fileUUID - The UUID of the file to retrieve.
+     * @returns {Promise<string>} - A promise resolving to the file content as a string.
+     */
+    async getFile(fileUUID: UUID): Promise<string> {
         const str = this.metaUtility.getFileByUUID(fileUUID);
         return str;
     }
