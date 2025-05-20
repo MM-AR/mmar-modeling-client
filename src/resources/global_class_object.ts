@@ -62,7 +62,7 @@ export class GlobalClassObject {
     this.onObjectChange();
   }
 
-  getIcon(wholeVizRep: string) {
+  async getIcon(wholeVizRep: string) {
     let vizRep: string = wholeVizRep;
     let map = '';
     let next = false;
@@ -76,10 +76,10 @@ export class GlobalClassObject {
         if (string.startsWith('data')) {
           map = string;
         }
-        else if (string.endsWith('getFileByUUIDAndConvertToBase64(')) {
+        else if (string.endsWith('getFile(')) {
           next = true;
         } else if (next) {
-          const str = this.metaUtility.getFileByUUID(string);
+          const str = await this.metaUtility.getFileByUUID(string);
           map = str;
           break;
         }
