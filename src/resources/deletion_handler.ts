@@ -94,10 +94,6 @@ export class DeletionHandler {
         // delete classInstance from DB if autoSave is enabled
         // if bendpoint, call deleteBendpoint instead
         if (this.globalObjectInstance.autoSave) {
-            // wait for globalObjectInstance.doSceneInstancePatch to be false
-            while (this.globalObjectInstance.doSceneInstancePatch) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
             try {
                 if (classInstanceIsBendpoint) {
                     await this.fetchHelper.bendpointInstanceDELETE(classInstance.uuid);
@@ -184,10 +180,6 @@ export class DeletionHandler {
 
         // delete relationclassInstance from DB if autoSave is enabled
         if (this.globalObjectInstance.autoSave) {
-            // wait for globalObjectInstance.doSceneInstancePatch to be false
-            while (this.globalObjectInstance.doSceneInstancePatch) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-            }
             try {
                 await this.fetchHelper.relationClassesInstancesAllDELETE2(relationclassInstance.uuid);
                 this.logger.log(`RelationclassInstance with uuid ${relationclassInstance.uuid} deleted from DB`, 'info');
