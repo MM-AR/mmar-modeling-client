@@ -56,6 +56,8 @@ export class GlobalDefinition {
   readyForVizRepUpdate: boolean;
   runMechanism: boolean;
   localFiles: Map<string, string>;
+  autoSave: boolean;
+  doSceneInstancePatch: boolean;
 
   constructor() {
     
@@ -94,6 +96,8 @@ export class GlobalDefinition {
     this.readyForVizRepUpdate = true;
     this.runMechanism = false;
     this.localFiles = new Map<string, string>();
+    this.autoSave = true;
+    this.doSceneInstancePatch = false;
   }
   
       
