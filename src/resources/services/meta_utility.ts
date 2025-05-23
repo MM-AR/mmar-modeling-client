@@ -164,7 +164,7 @@ export class MetaUtility {
             for (const metaClass of sceneType.classes) {
                 metaAttribute = metaClass.attributes.find(attribute => attribute.uuid == uuid);
                 if (metaAttribute) {
-                    break;
+                    return metaAttribute;
                 }
             }
         }
@@ -172,9 +172,16 @@ export class MetaUtility {
             for (const metaRelationClass of sceneType.relationclasses) {
                 metaAttribute = metaRelationClass.attributes.find(attribute => attribute.uuid == uuid);
                 if (metaAttribute) {
-                    break;
+                    return metaAttribute;
                 }
             }
+        }
+
+        if (!metaAttribute) {
+            await this.fetchHelper.attributesGET(uuid).then((response) => {
+                metaAttribute = plainToInstance(Attribute, response);
+                return metaAttribute;
+            });
         }
 
         return metaAttribute;
