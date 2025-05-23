@@ -4239,7 +4239,7 @@ export class FetchHelper implements ICustomElementViewModel {
      * @return Successful operation
      */
     attributeTypeGET(attributeTypeUUID: string): Promise<AttributeType> {
-        let url_ = this.baseUrl + "/metamodel/attributeType/{AttributeTypeUUID}";
+        let url_ = this.baseUrl + "/metamodel/attributeTypes/{AttributeTypeUUID}";
         if (attributeTypeUUID === undefined || attributeTypeUUID === null)
             throw new Error("The parameter 'attributeTypeUUID' must be defined.");
         url_ = url_.replace("{AttributeTypeUUID}", encodeURIComponent("" + attributeTypeUUID));
@@ -4298,7 +4298,7 @@ export class FetchHelper implements ICustomElementViewModel {
      * @return Successful operation
      */
     attributeTypePATCH(attributeTypeUUID: string, body: AttributeType): Promise<AttributeType> {
-        let url_ = this.baseUrl + "/metamodel/attributeType/{AttributeTypeUUID}";
+        let url_ = this.baseUrl + "/metamodel/attributeTypes/{AttributeTypeUUID}";
         if (attributeTypeUUID === undefined || attributeTypeUUID === null)
             throw new Error("The parameter 'attributeTypeUUID' must be defined.");
         url_ = url_.replace("{AttributeTypeUUID}", encodeURIComponent("" + attributeTypeUUID));
@@ -4360,7 +4360,7 @@ export class FetchHelper implements ICustomElementViewModel {
      * @return Attribute type deleted successfully
      */
     attributeTypeDELETE2(attributeTypeUUID: string): Promise<void> {
-        let url_ = this.baseUrl + "/metamodel/attributeType/{AttributeTypeUUID}";
+        let url_ = this.baseUrl + "/metamodel/attributeTypes/{AttributeTypeUUID}";
         if (attributeTypeUUID === undefined || attributeTypeUUID === null)
             throw new Error("The parameter 'attributeTypeUUID' must be defined.");
         url_ = url_.replace("{AttributeTypeUUID}", encodeURIComponent("" + attributeTypeUUID));
@@ -7215,7 +7215,7 @@ export class FetchHelper implements ICustomElementViewModel {
      * @return attribute instance updated successfully
      */
     attributeInstancesPATCH(attributeUUID: string, body: AttributeInstance): Promise<AttributeInstance> {
-        let url_ = this.baseUrl + "/instances/attributeInstances/{AttributeUUID}";
+        let url_ = this.baseUrl + "/instances/attributesInstances/{AttributeUUID}";
         if (attributeUUID === undefined || attributeUUID === null)
             throw new Error("The parameter 'attributeUUID' must be defined.");
         url_ = url_.replace("{AttributeUUID}", encodeURIComponent("" + attributeUUID));
