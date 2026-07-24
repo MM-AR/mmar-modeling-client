@@ -178,5 +178,5 @@ export class TopNavBar {
             disabled: false
          }
       ]
-   }
+   };
 }
